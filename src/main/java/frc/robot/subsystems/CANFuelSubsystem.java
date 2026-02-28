@@ -78,7 +78,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ShooterEncoderFeedback", feedback);
     //target volts set to opposite
     double targetVolts =feedback * voltPerRPS *-1;
-    SmartDashboard.putNumber("ShooterControllerFeedback", feedback);
+    SmartDashboard.putNumber("ShooterControllertargetVolts", targetVolts);
     setIntakeLauncherRoller(targetVolts);
   }     
   // A method to set the voltage of the intake roller
