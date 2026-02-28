@@ -16,9 +16,9 @@ import frc.robot.subsystems.CANFuelSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoTurnRight extends SequentialCommandGroup {
+public class Jiggle extends SequentialCommandGroup {
   /** Creates a new ExampleAuto. */
-  public AutoTurnRight(CANDriveSubsystem driveSubsystem, CANFuelSubsystem ballSubsystem) {
+  public Jiggle(CANDriveSubsystem driveSubsystem) {
    
 
     // Add your commands in the addCommands() call, e.g.
@@ -28,14 +28,13 @@ public class AutoTurnRight extends SequentialCommandGroup {
     // intentionally creates a command which does not end which allows us to control
     // the timing using the withTimeout decorator
     new AutoDrive(driveSubsystem,0.5,  0.0).withTimeout(.25),
-     new WaitCommand(1),
-    new AutoDrive(driveSubsystem,0,  -0.5).withTimeout(.65),
-     new WaitCommand(1),
+     new WaitCommand(.25),
+    new AutoDrive(driveSubsystem,-0.5,  0).withTimeout(.25),
+     new WaitCommand(.25));
     
     
 
-    // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a
-    // total of 10 seconds
-    new Launch(ballSubsystem).withTimeout(10));
+    
+    
   }
 }
