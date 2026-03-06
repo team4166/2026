@@ -24,7 +24,7 @@ public class Launch extends Command {
   // appropriate values for intaking
   @Override
   public void initialize() {
-    // SmartDashboard.putNumber("Launching launcher roller target", 60);
+    SmartDashboard.putNumber("Launching launcher roller target", 60);
 
     fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
   }
@@ -35,7 +35,7 @@ public class Launch extends Command {
   public void execute() {
     fuelSubsystem
         .setControlledIntakeLauncherRoller(
-            SmartDashboard.getNumber("Launching launcher roller target", 60));
+            SmartDashboard.getNumber("Launching launcher roller target", 1000));
   }
 
   // Called once the command ends or is interrupted. Stop the rollers

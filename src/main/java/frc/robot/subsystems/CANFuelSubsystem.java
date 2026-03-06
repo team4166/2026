@@ -39,7 +39,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     turnController = new PIDController(SmartDashboard.getNumber("Launcher P", 0.1), SmartDashboard.getNumber("Launcher I", 0), SmartDashboard.getNumber("Launcher D", 0));
       /// turnController.setTolerance(TurnControlConstants.TURN_TO_ANGLE_THRESHOLD);
       /// 
-  shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
+shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -74,12 +74,12 @@ public class CANFuelSubsystem extends SubsystemBase {
   }
   public void setControlledIntakeLauncherRoller(double target) {
     // SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
-    double feedback = turnController.calculate(shooterEncoder.getRate(), target);
-    SmartDashboard.putNumber("ShooterEncoderFeedback", feedback);
-    //target volts set to opposite
-    double targetVolts =feedback * voltPerRPS *-1;
-    SmartDashboard.putNumber("ShooterControllertargetVolts", targetVolts);
-    setIntakeLauncherRoller(targetVolts);
+    // double feedback = turnController.calculate(shooterEncoder.getRate(), target);
+    // SmartDashboard.putNumber("ShooterEncoderFeedback", feedback);
+    // //target volts set to opposite
+    // double targetVolts =feedback * voltPerRPS *-1;
+    // SmartDashboard.putNumber("ShooterControllertargetVolts", targetVolts);
+    setIntakeLauncherRoller(12); // TEMP hardcoded to max
   }     
   // A method to set the voltage of the intake roller
   public void setFeederRoller(double voltage) {

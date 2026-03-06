@@ -89,7 +89,7 @@ public class RobotContainer {
     // stick away from you (a negative value) drives the robot forwards (a positive
     // value)
     driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, driverController));
-    driverController.a().whileTrue(new Jiggle(driveSubsystem));
+    driverController.a().whileTrue(new Jiggle(driveSubsystem).repeatedly());
 
     fuelSubsystem.setDefaultCommand(fuelSubsystem.run(() -> fuelSubsystem.stop()));
   }
