@@ -100,4 +100,7 @@ shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
 
   }
+  public void setShooterRoller2(double voltage) {
+    intakeLauncherRoller.setVoltage(voltage);
+  }
 }
