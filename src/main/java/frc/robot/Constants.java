@@ -42,6 +42,8 @@ public final class Constants {
     public static final double SHOOTER_ENCODER_PULSES_PER_ROTATION = 2038.0;
     // How fast we have observed our shooter turning in rotations per second at 12 volts
     public static final double SHOOTER_MAX_MEASURED_RPS = 74.0;
+    // Percentage (e.g. 0.10 = 10%) below max shooter speed that we can start shooting at
+    public static final double SHOOTING_SPEED_TOLERANCE = 1.0;
 
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
