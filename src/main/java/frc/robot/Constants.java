@@ -36,13 +36,20 @@ public final class Constants {
     public static final int FEEDER_MOTOR_CURRENT_LIMIT = 60;
     public static final int LAUNCHER_MOTOR_CURRENT_LIMIT = 60;
 
+    // roboRIO DIO pins for the shooter encoder
+    public static final int SHOOTER_ENCODER_DIO_CHANNEL_A = 8;
+    public static final int SHOOTER_ENCODER_DIO_CHANNEL_B = 9;
+    public static final double SHOOTER_ENCODER_PULSES_PER_ROTATION = 2038.0;
+    // How fast we have observed our shooter turning in rotations per second at 12 volts
+    public static final double SHOOTER_MAX_MEASURED_RPS = 74.0;
+
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
     // See the Software Guide for tuning information
     public static final double INTAKING_FEEDER_VOLTAGE = -12;
     public static final double INTAKING_INTAKE_VOLTAGE = 9;
     public static final double LAUNCHING_FEEDER_VOLTAGE = 10;
-    public static final double LAUNCHING_LAUNCHER_VOLTAGE = 10;
+    public static final double LAUNCHING_LAUNCHER_VOLTAGE = 12;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = 1;
   }
