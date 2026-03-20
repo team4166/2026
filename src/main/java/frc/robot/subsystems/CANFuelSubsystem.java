@@ -10,7 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.math.controller.PIDController;
+
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,13 +19,6 @@ import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
   private final SparkMax feederRoller;
-  private final SparkMax intakeLauncherRoller;
-    // Initializes an encoder on DIO pins 0 and 1
-  // Defaults to 4X decoding and non-inverted
-  private final Encoder shooterEncoder = new Encoder(8, 9);
-  private final PIDController turnController;
-  private final double shooterMaxRPS = 74;
-  private final double voltPerRPS = 12/shooterMaxRPS;
   private final Encoder shooterEncoder;
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
@@ -63,9 +56,7 @@ public class CANFuelSubsystem extends SubsystemBase {
 
   // A method to set the voltage of the intake roller
   public void setIntakeLauncherRoller(double voltage) {
-   
-
-    intakeLauncherRoller.setVoltage(voltage);
+   intakeLauncherRoller.setVoltage(voltage);
   }
   // A method to set the voltage of the intake roller
   public void setFeederRoller(double voltage) {
