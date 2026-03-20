@@ -10,15 +10,23 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.*;
+
 import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
   private final SparkMax feederRoller;
   private final SparkMax intakeLauncherRoller;
   private final Encoder shooterEncoder;
+  private final AnalogInput shooterChannelSonar;
+  private double voltageScaleFactor;
+  private long lastFuelSeenAt;
 
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
@@ -28,6 +36,9 @@ public class CANFuelSubsystem extends SubsystemBase {
     feederRoller = new SparkMax(FEEDER_MOTOR_ID, MotorType.kBrushed);
     shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B);
     shooterEncoder.setDistancePerPulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
+
+    shooterChannelSonar = new AnalogInput(SHOOTER_CHANNEL_SONAR_PIN);
+    voltageScaleFactor = 1;
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -59,9 +70,24 @@ public class CANFuelSubsystem extends SubsystemBase {
     intakeLauncherRoller.setVoltage(voltage);
   }
 
-  // A method to set the voltage of the intake roller
+  // A method to set the voltage of the intake rollerSONAR_CENTIMETER_SCALING
   public void setFeederRoller(double voltage) {
     feederRoller.setVoltage(voltage);
+  }
+
+  private double getSonarDistance() {
+    return shooterChannelSonar.getValue() * voltageScaleFactor * SONAR_CENTIMETER_SCALING;
+  }
+
+  public boolean isShooterHealthy() {
+    double currentDistance = getSonarDistance();
+    boolean ballIsThere = currentDistance <= SHOOTER_CHANNEL_WIDTH;
+
+    if (ballIsThere) {
+      lastFuelSeenAt = System.currentTimeMillis();
+    }
+
+    return ballIsThere || System.nanoTime() - lastFuelSeenAt < 1e+9 * 0.25;
   }
   
   // A method to stop the rollers
@@ -80,5 +106,9 @@ public class CANFuelSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
     SmartDashboard.putNumber("ShooterEncoderDistance", shooterEncoder.getDistance());
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
+    SmartDashboard.putNumber("ShooterSonarDistance", getSonarDistance());
+    SmartDashboard.putBoolean("IsShooterHealthy", isShooterHealthy());
+
+    voltageScaleFactor = 5 / RobotController.getVoltage5V();
   }
 }

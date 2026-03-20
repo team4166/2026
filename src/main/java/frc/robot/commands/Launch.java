@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.CANFuelSubsystem;
 import static frc.robot.Constants.FuelConstants.*;
 
@@ -14,10 +15,12 @@ public class Launch extends Command {
   /** Creates a new Intake. */
 
   CANFuelSubsystem fuelSubsystem;
+  private long lastUnhealthyAt;
 
   public Launch(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
     this.fuelSubsystem = fuelSystem;
+    lastUnhealthyAt = 0;
   }
 
   // Called when the command is initially scheduled. Set the rollers to the
@@ -36,6 +39,12 @@ public class Launch extends Command {
     fuelSubsystem
         .setIntakeLauncherRoller(
             SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_LAUNCHER_VOLTAGE));
+
+    if (!fuelSubsystem.isShooterHealthy() && System.nanoTime() - lastUnhealthyAt >= 1e+9) {
+      // Note: This is kinda naughty
+      new Intake(fuelSubsystem).withTimeout(0.25).schedule();
+      lastUnhealthyAt = System.nanoTime();
+    }
   }
 
   // Called once the command ends or is interrupted. Stop the rollers

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.units.TimeUnit;
+
+import static edu.wpi.first.units.Units.Millisecond;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -21,6 +25,8 @@ public final class Constants {
     public static final int LEFT_FOLLOWER_ID = 13;
     public static final int RIGHT_LEADER_ID = 10;
     public static final int RIGHT_FOLLOWER_ID = 11;
+
+    public static final double ROBOT_PERIODIC_RATE = Millisecond.fromBaseUnits(20);
 
     // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
     // likelihood of tripping breakers or damaging CIM motors
@@ -44,6 +50,10 @@ public final class Constants {
     public static final double SHOOTER_MAX_MEASURED_RPS = 74.0;
     // Percentage (e.g. 0.10 = 10%) below max shooter speed that we can start shooting at
     public static final double SHOOTING_SPEED_TOLERANCE = 1.0;
+    public final static int SHOOTER_CHANNEL_SONAR_PIN = 0;
+    public final static double SONAR_CENTIMETER_SCALING = 0.125;
+    public final static double SHOOTER_CHANNEL_WIDTH = 999;
+
 
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
