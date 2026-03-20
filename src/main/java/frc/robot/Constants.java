@@ -52,7 +52,7 @@ public final class Constants {
     public static final double SHOOTING_SPEED_TOLERANCE = 1.0;
     public final static int SHOOTER_CHANNEL_SONAR_PIN = 0;
     public final static double SONAR_CENTIMETER_SCALING = 0.125;
-    public final static double SHOOTER_CHANNEL_WIDTH = 999;
+    public final static double SHOOTER_CHANNEL_WIDTH = 8;
 
 
     // Voltage values for various fuel operations. These values may need to be tuned

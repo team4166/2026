@@ -39,6 +39,7 @@ public class CANFuelSubsystem extends SubsystemBase {
 
     shooterChannelSonar = new AnalogInput(SHOOTER_CHANNEL_SONAR_PIN);
     voltageScaleFactor = 1;
+    lastFuelSeenAt = System.nanoTime();
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -79,15 +80,22 @@ public class CANFuelSubsystem extends SubsystemBase {
     return shooterChannelSonar.getValue() * voltageScaleFactor * SONAR_CENTIMETER_SCALING;
   }
 
+  public void resetFuelSeenTime() {
+    lastFuelSeenAt = System.nanoTime();
+  }
+
   public boolean isShooterHealthy() {
     double currentDistance = getSonarDistance();
-    boolean ballIsThere = currentDistance <= SHOOTER_CHANNEL_WIDTH;
+    boolean ballIsThere = currentDistance < SHOOTER_CHANNEL_WIDTH;
 
     if (ballIsThere) {
-      lastFuelSeenAt = System.currentTimeMillis();
+      lastFuelSeenAt = System.nanoTime();
     }
 
-    return ballIsThere || System.nanoTime() - lastFuelSeenAt < 1e+9 * 0.25;
+    double msSinceLastBall = (System.nanoTime() - lastFuelSeenAt) / 1000000;
+    SmartDashboard.putNumber("msSinceLastBall", msSinceLastBall);
+
+    return ballIsThere || msSinceLastBall < 1000;
   }
   
   // A method to stop the rollers
@@ -108,6 +116,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
     SmartDashboard.putNumber("ShooterSonarDistance", getSonarDistance());
     SmartDashboard.putBoolean("IsShooterHealthy", isShooterHealthy());
+    SmartDashboard.putNumber("LastFuelSeenAt", lastFuelSeenAt);
 
     voltageScaleFactor = 5 / RobotController.getVoltage5V();
   }

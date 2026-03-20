@@ -15,21 +15,20 @@ public class Launch extends Command {
   /** Creates a new Intake. */
 
   CANFuelSubsystem fuelSubsystem;
-  private long lastUnhealthyAt;
+  private long startTime;
 
   public Launch(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
     this.fuelSubsystem = fuelSystem;
-    lastUnhealthyAt = 0;
+    startTime = System.nanoTime();
   }
 
   // Called when the command is initially scheduled. Set the rollers to the
   // appropriate values for intaking
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Launching launcher roller target", 60);
-
     fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+    fuelSubsystem.resetFuelSeenTime();
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
@@ -39,12 +38,6 @@ public class Launch extends Command {
     fuelSubsystem
         .setIntakeLauncherRoller(
             SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_LAUNCHER_VOLTAGE));
-
-    if (!fuelSubsystem.isShooterHealthy() && System.nanoTime() - lastUnhealthyAt >= 1e+9) {
-      // Note: This is kinda naughty
-      new Intake(fuelSubsystem).withTimeout(0.25).schedule();
-      lastUnhealthyAt = System.nanoTime();
-    }
   }
 
   // Called once the command ends or is interrupted. Stop the rollers
@@ -55,6 +48,7 @@ public class Launch extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // Finish if unhealthy
+    return !fuelSubsystem.isShooterHealthy() && System.nanoTime() - startTime >= 1e+9;
   }
 }
