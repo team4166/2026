@@ -44,14 +44,16 @@ public class Launch extends Command {
 
     long now = System.nanoTime();
 
-    if (now - launchStartTime >= TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION && now - fuelSubsystem.getLastFuelSeenAt() >= UNHEALTHY_COOLDOWN) {
+    if (now - launchStartTime >= SPIN_UP_NANOSECONDS && now - lastUnhealthyAt >= UNHEALTHY_COOLDOWN && now - fuelSubsystem.getLastFuelSeenAt() > TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION) {
       // Only update this time if we don't already know its unhealthy (UNHEALTHY_COOLDOWN) and it's been TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION since starting
-      lastUnhealthyAt = System.nanoTime();
+      lastUnhealthyAt = now;
     }
 
     if (now - lastUnhealthyAt <= UNHEALTHY_SHOOTER_AGITATE_TIME) {
+      SmartDashboard.putBoolean("Agitating", true);
       fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
     } else {
+      SmartDashboard.putBoolean("Agitating", false);
       fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
     }
   }

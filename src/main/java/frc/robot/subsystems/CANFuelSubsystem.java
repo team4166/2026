@@ -25,6 +25,8 @@ public class CANFuelSubsystem extends SubsystemBase {
   private final AnalogInput shooterChannelSonar;
   private double voltageScaleFactor;
   private long lastFuelSeenAt;
+  private double intakeLauncherSetPoint;
+  private long intakeLauncherSetChangeTime;
 
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
@@ -65,6 +67,10 @@ public class CANFuelSubsystem extends SubsystemBase {
 
   // A method to set the voltage of the intake roller
   public void setIntakeLauncherRoller(double voltage) {
+    if (intakeLauncherSetPoint != voltage) {
+      intakeLauncherSetPoint = voltage;
+      intakeLauncherSetChangeTime = System.nanoTime();
+    }
     intakeLauncherRoller.setVoltage(voltage);
   }
 
@@ -101,9 +107,13 @@ public class CANFuelSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
     SmartDashboard.putNumber("ShooterSonarDistance", getSonarDistance());
 
-    if (encoderRate < SHOOTER_BALL_SHOT_DETECTION_SPEED) {
+    long now = System.nanoTime();
+
+    if (intakeLauncherSetPoint != 0 && now - intakeLauncherSetChangeTime > SPIN_UP_NANOSECONDS && encoderRate > SHOOTER_BALL_SHOT_DETECTION_SPEED) {
       // Can be used in any subsystem to determine if we need to agitate
-      lastFuelSeenAt = System.nanoTime();
+      // This might catch some after our fast spin-up finishes (due to the encoder check), but that's fine. We don't want to agitate that quickly anyway.
+      lastFuelSeenAt = now;
+      SmartDashboard.putNumber("LastFuelSeenAt", lastFuelSeenAt);
     }
 
     voltageScaleFactor = 5 / RobotController.getVoltage5V();
