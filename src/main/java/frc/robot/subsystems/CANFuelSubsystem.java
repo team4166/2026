@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.*;
-
 import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
@@ -79,15 +77,8 @@ public class CANFuelSubsystem extends SubsystemBase {
     return shooterChannelSonar.getValue() * voltageScaleFactor * SONAR_CENTIMETER_SCALING;
   }
 
-  public boolean isShooterHealthy() {
-    double currentDistance = getSonarDistance();
-    boolean ballIsThere = currentDistance <= SHOOTER_CHANNEL_WIDTH;
-
-    if (ballIsThere) {
-      lastFuelSeenAt = System.currentTimeMillis();
-    }
-
-    return ballIsThere || System.nanoTime() - lastFuelSeenAt < 1e+9 * 0.25;
+  public long getLastFuelSeenAt() {
+    return lastFuelSeenAt;
   }
   
   // A method to stop the rollers
@@ -102,12 +93,18 @@ public class CANFuelSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    double encoderRate = shooterEncoder.getRate();
+
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
+    SmartDashboard.putNumber("ShooterEncoderRate", encoderRate);
     SmartDashboard.putNumber("ShooterEncoderDistance", shooterEncoder.getDistance());
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
     SmartDashboard.putNumber("ShooterSonarDistance", getSonarDistance());
-    SmartDashboard.putBoolean("IsShooterHealthy", isShooterHealthy());
+
+    if (encoderRate < SHOOTER_BALL_SHOT_DETECTION_SPEED) {
+      // Can be used in any subsystem to determine if we need to agitate
+      lastFuelSeenAt = System.nanoTime();
+    }
 
     voltageScaleFactor = 5 / RobotController.getVoltage5V();
   }

@@ -6,8 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.CANFuelSubsystem;
+
+import java.awt.*;
+
 import static frc.robot.Constants.FuelConstants.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -16,19 +18,19 @@ public class Launch extends Command {
 
   CANFuelSubsystem fuelSubsystem;
   private long lastUnhealthyAt;
+  private final long launchStartTime;
 
   public Launch(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
     this.fuelSubsystem = fuelSystem;
     lastUnhealthyAt = 0;
+    launchStartTime = System.nanoTime();
   }
 
   // Called when the command is initially scheduled. Set the rollers to the
   // appropriate values for intaking
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Launching launcher roller target", 60);
-
     fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
   }
 
@@ -40,10 +42,17 @@ public class Launch extends Command {
         .setIntakeLauncherRoller(
             SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_LAUNCHER_VOLTAGE));
 
-    if (!fuelSubsystem.isShooterHealthy() && System.nanoTime() - lastUnhealthyAt >= 1e+9) {
-      // Note: This is kinda naughty
-      new Intake(fuelSubsystem).withTimeout(0.25).schedule();
+    long now = System.nanoTime();
+
+    if (now - launchStartTime >= TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION && now - fuelSubsystem.getLastFuelSeenAt() >= UNHEALTHY_COOLDOWN) {
+      // Only update this time if we don't already know its unhealthy (UNHEALTHY_COOLDOWN) and it's been TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION since starting
       lastUnhealthyAt = System.nanoTime();
+    }
+
+    if (now - lastUnhealthyAt <= UNHEALTHY_SHOOTER_AGITATE_TIME) {
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
+    } else {
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
     }
   }
 

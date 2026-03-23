@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.units.TimeUnit;
 
 import static edu.wpi.first.units.Units.Millisecond;
+import static frc.robot.Utilities.millisecondsToNanoseconds;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -48,11 +49,15 @@ public final class Constants {
     public static final double SHOOTER_ENCODER_PULSES_PER_ROTATION = 2038.0;
     // How fast we have observed our shooter turning in rotations per second at 12 volts
     public static final double SHOOTER_MAX_MEASURED_RPS = 74.0;
+    public static final double SHOOTER_BALL_SHOT_DETECTION_SPEED = 999;
     // Percentage (e.g. 0.10 = 10%) below max shooter speed that we can start shooting at
     public static final double SHOOTING_SPEED_TOLERANCE = 1.0;
-    public final static int SHOOTER_CHANNEL_SONAR_PIN = 0;
-    public final static double SONAR_CENTIMETER_SCALING = 0.125;
-    public final static double SHOOTER_CHANNEL_WIDTH = 999;
+    public static final int SHOOTER_CHANNEL_SONAR_PIN = 0;
+    public static final double SONAR_CENTIMETER_SCALING = 0.125;
+    public static final double SHOOTER_CHANNEL_WIDTH = 15;
+    public static final long UNHEALTHY_SHOOTER_AGITATE_TIME = millisecondsToNanoseconds(500);
+    public static final long UNHEALTHY_COOLDOWN = UNHEALTHY_SHOOTER_AGITATE_TIME + millisecondsToNanoseconds(1500);
+    public static final long TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION = millisecondsToNanoseconds(750);
 
 
     // Voltage values for various fuel operations. These values may need to be tuned
