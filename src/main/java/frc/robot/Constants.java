@@ -4,10 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.units.TimeUnit;
-
 import static edu.wpi.first.units.Units.Millisecond;
 import static frc.robot.Utilities.millisecondsToNanoseconds;
+import static frc.robot.Utilities.secondsToNanoseconds;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -57,7 +56,7 @@ public final class Constants {
     public static final double SHOOTER_CHANNEL_WIDTH = 15;
     public static final long UNHEALTHY_SHOOTER_AGITATE_TIME = millisecondsToNanoseconds(500);
     public static final long UNHEALTHY_COOLDOWN = UNHEALTHY_SHOOTER_AGITATE_TIME + millisecondsToNanoseconds(1500);
-    public static final long TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION = millisecondsToNanoseconds(750);
+    public static final long TIME_WITHOUT_FUEL_UNHEALTHY_DECLARATION = millisecondsToNanoseconds(750);
 
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
@@ -68,7 +67,7 @@ public final class Constants {
     public static final double LAUNCHING_LAUNCHER_VOLTAGE = 12;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = 1;
-    public static final double SPIN_UP_NANOSECONDS = millisecondsToNanoseconds((long) (SPIN_UP_SECONDS * 1000));
+    public static final long SPIN_UP_NANOSECONDS = secondsToNanoseconds(SPIN_UP_SECONDS);
   }
 
   public static final class OperatorConstants {

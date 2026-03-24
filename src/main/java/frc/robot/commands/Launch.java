@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CANFuelSubsystem;
 
-import java.awt.*;
-
 import static frc.robot.Constants.FuelConstants.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -44,7 +42,11 @@ public class Launch extends Command {
 
     long now = System.nanoTime();
 
-    if (now - launchStartTime >= SPIN_UP_NANOSECONDS && now - lastUnhealthyAt >= UNHEALTHY_COOLDOWN && now - fuelSubsystem.getLastFuelSeenAt() > TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION) {
+    boolean pastStartupTime = now - launchStartTime >= SPIN_UP_NANOSECONDS;
+    boolean agitationCooldownComplete = now - lastUnhealthyAt >= UNHEALTHY_COOLDOWN;
+    boolean shooterIsUnhealthy = now - fuelSubsystem.getLastFuelSeenAt() > TIME_WITHOUT_FUEL_UNHEALTHY_DECLARATION;
+
+    if (pastStartupTime && agitationCooldownComplete && shooterIsUnhealthy) {
       // Only update this time if we don't already know its unhealthy (UNHEALTHY_COOLDOWN) and it's been TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION since starting
       lastUnhealthyAt = now;
     }

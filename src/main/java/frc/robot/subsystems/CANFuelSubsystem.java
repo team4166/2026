@@ -109,7 +109,10 @@ public class CANFuelSubsystem extends SubsystemBase {
 
     long now = System.nanoTime();
 
-    if (intakeLauncherSetPoint != 0 && now - intakeLauncherSetChangeTime > SPIN_UP_NANOSECONDS && encoderRate > SHOOTER_BALL_SHOT_DETECTION_SPEED) {
+    boolean launcherIsActive = intakeLauncherSetPoint != 0 && now - intakeLauncherSetChangeTime > SPIN_UP_NANOSECONDS;
+    boolean fuelHasBeenShot = encoderRate > SHOOTER_BALL_SHOT_DETECTION_SPEED;
+
+    if (launcherIsActive && fuelHasBeenShot) {
       // Can be used in any subsystem to determine if we need to agitate
       // This might catch some after our fast spin-up finishes (due to the encoder check), but that's fine. We don't want to agitate that quickly anyway.
       lastFuelSeenAt = now;
