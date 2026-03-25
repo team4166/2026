@@ -23,8 +23,8 @@ import static frc.robot.Constants.FuelConstants.*;
 public class CANFuelSubsystem extends SubsystemBase {
   private final SparkMax feederRoller;
   private final Encoder shooterEncoder;
-  private final long intakeLauncherSetChangeTime;
-  private final double intakeLauncherSetPoint;
+  private long intakeLauncherSetChangeTime;
+  private double intakeLauncherSetPoint;
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
   public CANFuelSubsystem() {
