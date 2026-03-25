@@ -14,10 +14,14 @@ public class Launch extends Command {
   /** Creates a new Intake. */
 
   CANFuelSubsystem fuelSubsystem;
+  private long lastUnhealthyAt;
+  private final long launchStartTime;
 
   public Launch(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
     this.fuelSubsystem = fuelSystem;
+    lastUnhealthyAt = 0;
+    launchStartTime = System.nanoTime();
   }
 
   // Called when the command is initially scheduled. Set the rollers to the
@@ -34,9 +38,27 @@ public class Launch extends Command {
   @Override
   public void execute() {
     fuelSubsystem
-        .setControlledIntakeLauncherRoller(
-            SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_FEEDER_VOLTAGE));
-  }
+        .setIntakeLauncherRoller(
+            SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_LAUNCHER_VOLTAGE));
+
+    long now = System.nanoTime();
+
+    boolean pastStartupTime = now - launchStartTime >= SPIN_UP_NANOSECONDS;
+    boolean agitationCooldownComplete = now - lastUnhealthyAt >= UNHEALTHY_COOLDOWN;
+    boolean shooterIsUnhealthy = now - fuelSubsystem.getLastFuelSeenAt() > TIME_WITHOUT_FUEL_UNHEALTHY_DECLARATION;
+
+    if (pastStartupTime && agitationCooldownComplete && shooterIsUnhealthy) {
+      // Only update this time if we don't already know its unhealthy (UNHEALTHY_COOLDOWN) and it's been TIME_WITHOUT_BALL_UNHEALTHY_DECLARATION since starting
+      lastUnhealthyAt = now;
+    }
+
+    if (now - lastUnhealthyAt <= UNHEALTHY_SHOOTER_AGITATE_TIME) {
+      SmartDashboard.putBoolean("Agitating", true);
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
+    } else {
+      SmartDashboard.putBoolean("Agitating", false);
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+    }
 
   // Called once the command ends or is interrupted. Stop the rollers
   @Override
