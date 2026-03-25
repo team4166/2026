@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
+  private final SparkMax intakeLauncherRoller;
   private final SparkMax feederRoller;
   private final Encoder shooterEncoder;
   /** Creates a new CANBallSubsystem. */
@@ -26,8 +27,8 @@ public class CANFuelSubsystem extends SubsystemBase {
     // create brushed motors for each of the motors on the launcher mechanism
     intakeLauncherRoller = new SparkMax(INTAKE_LAUNCHER_MOTOR_ID, MotorType.kBrushed);
     feederRoller = new SparkMax(FEEDER_MOTOR_ID, MotorType.kBrushed);
-    shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B)
-    shooterEncoder.setDistancePulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
+    shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B);
+    shooterEncoder.setDistancePerPulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
