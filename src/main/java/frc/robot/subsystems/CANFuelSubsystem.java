@@ -12,14 +12,19 @@ import com.revrobotics.spark.SparkMax;
 
 
 //import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
   private final SparkMax feederRoller;
   private final Encoder shooterEncoder;
+  private long intakeLauncherSetChangeTime;
+  private double intakeLauncherSetPoint;
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
   public CANFuelSubsystem() {
@@ -56,6 +61,10 @@ public class CANFuelSubsystem extends SubsystemBase {
 
   // A method to set the voltage of the intake roller
   public void setIntakeLauncherRoller(double voltage) {
+  if (intakeLauncherSetPoint != voltage) {
+    intakeLauncherSetPoint = voltage;
+    intakeLauncherSetChangeTime = System.nanoTime();
+  }
    intakeLauncherRoller.setVoltage(voltage);
   }
   // A method to set the voltage of the intake roller
