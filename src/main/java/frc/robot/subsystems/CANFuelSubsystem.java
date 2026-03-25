@@ -10,7 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.math.controller.PIDController;
+
 //import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,27 +19,15 @@ import static frc.robot.Constants.FuelConstants.*;
 
 public class CANFuelSubsystem extends SubsystemBase {
   private final SparkMax feederRoller;
-  private final SparkMax intakeLauncherRoller;
-    // Initializes an encoder on DIO pins 0 and 1
-  // Defaults to 4X decoding and non-inverted
-  private final Encoder shooterEncoder = new Encoder(8, 9);
-  private final PIDController turnController;
-  private final double shooterMaxRPS = 74;
-  private final double voltPerRPS = 12/shooterMaxRPS;
-  
+  private final Encoder shooterEncoder;
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
   public CANFuelSubsystem() {
     // create brushed motors for each of the motors on the launcher mechanism
     intakeLauncherRoller = new SparkMax(INTAKE_LAUNCHER_MOTOR_ID, MotorType.kBrushed);
     feederRoller = new SparkMax(FEEDER_MOTOR_ID, MotorType.kBrushed);
-    // SmartDashboard.putNumber("Launcher P", 0.1);
-    // SmartDashboard.putNumber("Launcher I", 0);
-    // SmartDashboard.putNumber("Launcher D", 0);
-    turnController = new PIDController(SmartDashboard.getNumber("Launcher P", 0.1), SmartDashboard.getNumber("Launcher I", 0), SmartDashboard.getNumber("Launcher D", 0));
-      /// turnController.setTolerance(TurnControlConstants.TURN_TO_ANGLE_THRESHOLD);
-      /// 
-shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
+    shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B)
+    shooterEncoder.setDistancePulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -68,19 +56,8 @@ shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
 
   // A method to set the voltage of the intake roller
   public void setIntakeLauncherRoller(double voltage) {
-    // SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
-
-    intakeLauncherRoller.setVoltage(voltage);
+   intakeLauncherRoller.setVoltage(voltage);
   }
-  public void setControlledIntakeLauncherRoller(double target) {
-    // SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
-    // double feedback = turnController.calculate(shooterEncoder.getRate(), target);
-    // SmartDashboard.putNumber("ShooterEncoderFeedback", feedback);
-    // //target volts set to opposite
-    // double targetVolts =feedback * voltPerRPS *-1;
-    // SmartDashboard.putNumber("ShooterControllertargetVolts", targetVolts);
-    setIntakeLauncherRoller(12); // TEMP hardcoded to max
-  }     
   // A method to set the voltage of the intake roller
   public void setFeederRoller(double voltage) {
     feederRoller.setVoltage(voltage);
@@ -91,7 +68,10 @@ shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
     feederRoller.set(0);
     intakeLauncherRoller.set(0);
   }
-
+  public boolean shooterAtShootingSpeed() {
+    return shooterEncoder.getRate() >= SHOOTER_MAX_MEASURED_RPS * SHOOTING_SPEED_TOLERANCE;
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -99,8 +79,5 @@ shooterEncoder.setDistancePerPulse(1.0 / 2038.0);
     SmartDashboard.putNumber("ShooterEncoderDistance", shooterEncoder.getDistance());
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
 
-  }
-  public void setShooterRoller2(double voltage) {
-    intakeLauncherRoller.setVoltage(voltage);
   }
 }
