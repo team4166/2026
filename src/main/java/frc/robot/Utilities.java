@@ -6,7 +6,7 @@ public class Utilities {
     return milliseconds * 1000000;
   }
 
-  public static long millisecondsToNanoseconds(double seconds) {
+  public static long secondsToNanoseconds(double seconds) {
     return millisecondsToNanoseconds((long) (seconds * 1000));
   }
 }

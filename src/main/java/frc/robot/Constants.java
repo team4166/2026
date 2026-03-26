@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Millisecond;
+import static frc.robot.Constants.FuelConstants.SPIN_UP_NANOSECONDS;
 import static frc.robot.Utilities.millisecondsToNanoseconds;
 import static frc.robot.Utilities.secondsToNanoseconds;
 
@@ -63,6 +64,8 @@ public final class Constants {
     public static final double LAUNCHING_LAUNCHER_VOLTAGE = 12;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = 1;
+    public static final long SPIN_UP_NANOSECONDS = secondsToNanoseconds(SPIN_UP_SECONDS);
+    public static final long SHOOTER_BALL_SHOT_DETECTION_SPEED = -55;
   }
 
   public static final class OperatorConstants {

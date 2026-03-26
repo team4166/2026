@@ -25,14 +25,16 @@ public class CANFuelSubsystem extends SubsystemBase {
   private final Encoder shooterEncoder;
   private long intakeLauncherSetChangeTime;
   private double intakeLauncherSetPoint;
+  private final SparkMax intakeLauncherRoller;
+  private long lastFuelSeenAt;
   /** Creates a new CANBallSubsystem. */
   @SuppressWarnings("removal")
   public CANFuelSubsystem() {
     // create brushed motors for each of the motors on the launcher mechanism
     intakeLauncherRoller = new SparkMax(INTAKE_LAUNCHER_MOTOR_ID, MotorType.kBrushed);
     feederRoller = new SparkMax(FEEDER_MOTOR_ID, MotorType.kBrushed);
-    shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B)
-    shooterEncoder.setDistancePulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
+    shooterEncoder = new Encoder(SHOOTER_ENCODER_DIO_CHANNEL_A, SHOOTER_ENCODER_DIO_CHANNEL_B);
+    shooterEncoder.setDistancePerPulse(1.0 / SHOOTER_ENCODER_PULSES_PER_ROTATION);
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -71,7 +73,9 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void setFeederRoller(double voltage) {
     feederRoller.setVoltage(voltage);
   }
-  
+  public long getLastFuelSeenAt() {
+    return lastFuelSeenAt;
+  }
   // A method to stop the rollers
   public void stop() {
     feederRoller.set(0);
@@ -83,10 +87,22 @@ public class CANFuelSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
+    double encoderRate = shooterEncoder.getRate();
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ShooterEncoderRate", shooterEncoder.getRate());
     SmartDashboard.putNumber("ShooterEncoderDistance", shooterEncoder.getDistance());
     SmartDashboard.putNumber("ShooterEncoderCount", shooterEncoder.get());
 
+  
+    long now = System.nanoTime();
+    
+
+    boolean launcherISActive = intakeLauncherSetPoint != 0 && now - intakeLauncherSetChangeTime > SPIN_UP_NANOSECONDS;
+    boolean fuelHasBeenShot = encoderRate > SHOOTER_BALL_SHOT_DETECTION_SPEED;
+
+    if (launcherISActive && fuelHasBeenShot) {
+      lastFuelSeenAt = now;
+      SmartDashboard.putNumber("LastFuelSeenAt", lastFuelSeenAt);
+    }
   }
 }

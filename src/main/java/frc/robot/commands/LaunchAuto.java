@@ -34,7 +34,7 @@ public class LaunchAuto extends Command {
   @Override
   public void execute() {
     fuelSubsystem
-        .setControlledIntakeLauncherRoller(
+        .setIntakeLauncherRoller(
             SmartDashboard.getNumber("Launching launcher roller target", 1000));
   }
 
