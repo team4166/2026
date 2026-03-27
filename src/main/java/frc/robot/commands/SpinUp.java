@@ -15,9 +15,12 @@ public class SpinUp extends Command {
 
   CANFuelSubsystem fuelSubsystem;
 
+  private long startTimeNano; 
+
   public SpinUp(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
     this.fuelSubsystem = fuelSystem;
+    
   }
 
   // Called when the command is initially scheduled. Set the rollers to the
@@ -29,6 +32,7 @@ public class SpinUp extends Command {
             SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
     fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
     SmartDashboard.putBoolean("Agitating", true);
+    startTimeNano = System.nanoTime();
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
@@ -41,6 +45,7 @@ public class SpinUp extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("Agitating", false);
+    SmartDashboard.putNumber("SpinDuration", nanosecondsToMilliseconds(System.nanoTime() - startTimeNano)) ;
   }
 
   // Returns true when the command should end.
