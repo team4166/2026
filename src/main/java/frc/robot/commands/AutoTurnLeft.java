@@ -35,7 +35,7 @@ public class AutoTurnLeft extends SequentialCommandGroup {
     
     
 
-    // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a
+    // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a0
     // total of 10 seconds
     new LaunchSequence(ballSubsystem).withTimeout(10));
   }
