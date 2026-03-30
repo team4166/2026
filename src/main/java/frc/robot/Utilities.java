@@ -9,4 +9,8 @@ public class Utilities {
   public static long secondsToNanoseconds(double seconds) {
     return millisecondsToNanoseconds((long) (seconds * 1000));
   }
+
+   public static double nanosecondsToMilliseconds (long nanoseconds) {
+    return Math.round(nanoseconds / 1000000.0);
+    }
 }
