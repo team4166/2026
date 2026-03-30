@@ -32,7 +32,7 @@ public class Launch extends Command {
   public void initialize() {
     SmartDashboard.putNumber(LAUNCHING_LAUNCHER_ROLLER_TARGET_KEY, 60);
 
-    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_LAUNCHER_ROLLER_VALUE_KEY, LAUNCHING_FEEDER_VOLTAGE));
+    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_SPINUP_FEEDER_VALUE_KEY, LAUNCHING_FEEDER_VOLTAGE));
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
