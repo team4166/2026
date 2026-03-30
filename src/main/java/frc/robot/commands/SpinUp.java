@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CANFuelSubsystem;
 import static frc.robot.Constants.FuelConstants.*;
+import static frc.robot.Constants.SmartDashboardConstants.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SpinUp extends Command {
@@ -27,11 +28,9 @@ public class SpinUp extends Command {
   // appropriate values for intaking
   @Override
   public void initialize() {
-    fuelSubsystem
-        .setIntakeLauncherRoller(
-            SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
-    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
-    SmartDashboard.putBoolean("Agitating", true);
+    fuelSubsystem.setIntakeLauncherRoller(SmartDashboard.getNumber(LAUNCHING_LAUNCHER_ROLLER_VALUE_KEY, LAUNCHING_LAUNCHER_VOLTAGE));
+    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_SPINUP_FEEDER_VALUE_KEY, SPIN_UP_FEEDER_VOLTAGE));
+    SmartDashboard.putBoolean(AGITATING_KEY, true);
     startTimeNano = System.nanoTime();
   }
 
@@ -44,7 +43,7 @@ public class SpinUp extends Command {
   // Called once the command ends or is interrupted. Stop the rollers
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("Agitating", false);
+    SmartDashboard.putBoolean(AGITATING_KEY, false);
     SmartDashboard.putNumber("SpinDuration", nanosecondsToMilliseconds(System.nanoTime() - startTimeNano)) ;
   }
 

@@ -79,5 +79,14 @@ public final class Constants {
     public static final double DRIVE_SCALING = .7;
     public static final double ROTATION_SCALING = .8;
   }
+
+  public final static class SmartDashboardConstants {
+    public static final String AGITATING_KEY = "Agitating";
+    public static final String LAUNCHING_LAUNCHER_ROLLER_VALUE_KEY = "Launching launcher roller value";
+    public static final String LAUNCHING_SPINUP_FEEDER_VALUE_KEY = "Launching spin-up feeder value";
+    public static final String LAUNCHING_LAUNCHER_ROLLER_TARGET_KEY = "Launching launcher roller target";
+    public static final String LAUNCHING_FEEDER_ROLLER_VALUE_KEY = "Launching feeder roller value";
+  }
+  
 }
 

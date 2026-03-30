@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CANFuelSubsystem;
 import static frc.robot.Constants.FuelConstants.*;
+import static frc.robot.Constants.SmartDashboardConstants.*;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Launch extends Command {
@@ -28,9 +30,9 @@ public class Launch extends Command {
   // appropriate values for intaking
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Launching launcher roller target", 60);
+    SmartDashboard.putNumber(LAUNCHING_LAUNCHER_ROLLER_TARGET_KEY, 60);
 
-    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+    fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_SPINUP_FEEDER_VALUE_KEY, LAUNCHING_FEEDER_VOLTAGE));
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
@@ -39,7 +41,7 @@ public class Launch extends Command {
   public void execute() {
     fuelSubsystem
         .setIntakeLauncherRoller(
-            SmartDashboard.getNumber("Launching launcher roller target", LAUNCHING_LAUNCHER_VOLTAGE));
+            SmartDashboard.getNumber(LAUNCHING_LAUNCHER_ROLLER_TARGET_KEY, LAUNCHING_LAUNCHER_VOLTAGE));
 
     long now = System.nanoTime();
 
@@ -53,11 +55,11 @@ public class Launch extends Command {
     }
 
     if (now - lastUnhealthyAt <= UNHEALTHY_SHOOTER_AGITATE_TIME) {
-      SmartDashboard.putBoolean("Agitating", true);
-      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching spin-up feeder value", SPIN_UP_FEEDER_VOLTAGE));
+      SmartDashboard.putBoolean(AGITATING_KEY, true);
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_SPINUP_FEEDER_VALUE_KEY, SPIN_UP_FEEDER_VOLTAGE));
     } else {
-      SmartDashboard.putBoolean("Agitating", false);
-      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+      SmartDashboard.putBoolean(AGITATING_KEY, false);
+      fuelSubsystem.setFeederRoller(SmartDashboard.getNumber(LAUNCHING_FEEDER_ROLLER_VALUE_KEY, LAUNCHING_FEEDER_VOLTAGE));
     }
   }
 
