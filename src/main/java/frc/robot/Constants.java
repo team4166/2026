@@ -48,13 +48,13 @@ public final class Constants {
     public static final int SHOOTER_ENCODER_DIO_CHANNEL_B = 9;
     public static final double SHOOTER_ENCODER_PULSES_PER_ROTATION = 2038.0;
     // How fast we have observed our shooter turning in rotations per second at 12 volts
-    public static final double SHOOTER_MAX_MEASURED_RPS = 74.0;
+    public static final double SHOOTER_MAX_MEASURED_RPS = -74.0;
     // Percentage (e.g. 0.10 = 10%) below max shooter speed that we can start shooting at
-    public static final double SHOOTING_SPEED_TOLERANCE = 1.0;
+    public static final double SHOOTING_SPEED_TOLERANCE = 0.93;
     // agitation time(?), im not sure what exactly to call it just yet.
     public static final long UNHEALTHY_SHOOTER_AGITATE_TIME = millisecondsToNanoseconds(500);
     public static final long UNHEALTHY_COOLDOWN = UNHEALTHY_SHOOTER_AGITATE_TIME + millisecondsToNanoseconds(1500);
-    public static final long TIME_WITHOUT_FUEL_UNHEALTHY_DECLARATION = millisecondsToNanoseconds(750);
+    public static final long TIME_WITHOUT_FUEL_UNHEALTHY_DECLARATION = millisecondsToNanoseconds(500);
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
     // See the Software Guide for tuning information
@@ -64,7 +64,7 @@ public final class Constants {
     public static final double LAUNCHING_LAUNCHER_VOLTAGE = 12;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = 1;
-    public static final long SPIN_UP_NANOSECONDS = secondsToNanoseconds(SPIN_UP_SECONDS);
+    public static final long SPIN_UP_NANOSECONDS = secondsToNanoseconds(0);
     public static final long SHOOTER_BALL_SHOT_DETECTION_SPEED = -55;
   }
 

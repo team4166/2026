@@ -82,7 +82,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     intakeLauncherRoller.set(0);
   }
   public boolean shooterAtShootingSpeed() {
-    return shooterEncoder.getRate() >= SHOOTER_MAX_MEASURED_RPS * SHOOTING_SPEED_TOLERANCE;
+    return shooterEncoder.getRate() <= SHOOTER_MAX_MEASURED_RPS * SHOOTING_SPEED_TOLERANCE;
   }
   
   @Override
