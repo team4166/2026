@@ -45,12 +45,12 @@ public class SpinUp extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("Agitating", false);
-    SmartDashboard.putNumber("SpinDuration", system.nanoTime() - startTimeNano) ;
+    SmartDashboard.putNumber("SpinDuration", nanosecondsToMilliseconds(System.nanoTime() - startTimeNano)) ;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return fuelSubsystem.shooterATShootingSpeed();
+    return fuelSubsystem.shooterAtShootingSpeed();
   }
 }

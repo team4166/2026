@@ -27,15 +27,15 @@ public class AutoTurnRight extends SequentialCommandGroup {
     // Drive backwards for .25 seconds. The driveArcadeAuto command factory
     // intentionally creates a command which does not end which allows us to control
     // the timing using the withTimeout decorator
-    //new AutoDrive(driveSubsystem, -0.5,  0.0).withTimeout(1.8),
-    // new WaitCommand(1),
-    //new AutoDrive(driveSubsystem,0,  0.5).withTimeout(.65),
-     //new WaitCommand(1),
-    
+    new AutoDrive(driveSubsystem,1,  0).withTimeout(.25),
+    new WaitCommand(2), 
+    new AutoDrive(driveSubsystem,0,  -0.5).withTimeout(.65),
+    new WaitCommand(1), 
+
     
 
     // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a
     // total of 10 seconds
-    new Launch(ballSubsystem).withTimeout(10));
+    new LaunchSequence(ballSubsystem).withTimeout(10));
   }
 }

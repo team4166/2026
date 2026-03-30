@@ -59,6 +59,7 @@ public class Launch extends Command {
       SmartDashboard.putBoolean("Agitating", false);
       fuelSubsystem.setFeederRoller(SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
     }
+  }
 
   // Called once the command ends or is interrupted. Stop the rollers
   @Override
