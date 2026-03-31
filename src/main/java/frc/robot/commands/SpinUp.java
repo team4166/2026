@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CANFuelSubsystem;
 import static frc.robot.Constants.FuelConstants.*;
 import static frc.robot.Constants.SmartDashboardConstants.*;
+import static frc.robot.Utilities.nanosecondsToMilliseconds; 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SpinUp extends Command {
@@ -44,7 +45,7 @@ public class SpinUp extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean(AGITATING_KEY, false);
-    SmartDashboard.putNumber("SpinDuration", nanosecondsToMilliseconds(System.nanoTime() - startTimeNano)) ;
+    SmartDashboard.putNumber(SPIN_DURATION_KEY, nanosecondsToMilliseconds(System.nanoTime() - startTimeNano)) ;
   }
 
   // Returns true when the command should end.

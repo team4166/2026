@@ -86,6 +86,7 @@ public final class Constants {
     public static final String LAUNCHING_SPINUP_FEEDER_VALUE_KEY = "Launching spin-up feeder value";
     public static final String LAUNCHING_LAUNCHER_ROLLER_TARGET_KEY = "Launching launcher roller target";
     public static final String LAUNCHING_FEEDER_ROLLER_VALUE_KEY = "Launching feeder roller value";
+    public static final String SPIN_DURATION_KEY = "SpinDuration";
   }
   
 }
