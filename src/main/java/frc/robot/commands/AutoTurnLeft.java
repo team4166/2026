@@ -29,14 +29,14 @@ public class AutoTurnLeft extends SequentialCommandGroup {
     // the timing using the withTimeout decorator
     new AutoDrive(driveSubsystem,1,  0).withTimeout(.25),
     new WaitCommand(2), 
-    new AutoDrive(driveSubsystem,0,  0.5).withTimeout(.65),
+    new AutoDrive(driveSubsystem,0,  -0.5).withTimeout(.65),
     new WaitCommand(1), 
 
     
     
 
-    // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a
+    // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a0
     // total of 10 seconds
-    new LaunchSequence(ballSubsystem).withTimeout(10));
+    new Launch(ballSubsystem).withTimeout(10));
   }
 }

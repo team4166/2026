@@ -15,7 +15,7 @@ import frc.robot.commands.AutoTurnLeft;
 import frc.robot.commands.AutoTurnRight;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
-import frc.robot.commands.ExampleAuto;
+import frc.robot.commands.AutoCenter;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Jiggle;
 import frc.robot.commands.LaunchSequence;
@@ -54,7 +54,7 @@ public class RobotContainer {
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
-    autoChooser.setDefaultOption("Autonomous Center", new ExampleAuto(driveSubsystem, fuelSubsystem));
+    autoChooser.setDefaultOption("Autonomous Center", new AutoCenter(driveSubsystem, fuelSubsystem));
     autoChooser.addOption("Auto Start Left", new AutoTurnRight(driveSubsystem, fuelSubsystem));
     autoChooser.addOption("Auto Start Right", new AutoTurnLeft(driveSubsystem, fuelSubsystem));
     SmartDashboard.putData("autochooser",autoChooser);
